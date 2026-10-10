@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment: { POSTGRES_USER: sentinel, POSTGRES_PASSWORD: sentinel, POSTGRES_DB: sentineledge }
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U sentinel"], interval: 3s, retries: 20 }
+    volumes: [pgdata:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 3s, retries: 20 }
+  mqtt:
+    image: eclipse-mosquitto:2
+    volumes: ["./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro"]
+    ports: ["1883:1883"]
+  backend:
+    build: ./backend
+    env_file: [{ path: .env, required: false }]
+    environment:
+      DATABASE_URL: postgresql+psycopg2://sentinel:sentinel@postgres:5432/sentineledge
+      REDIS_URL: redis://redis:6379/0
+      MQTT_HOST: mqtt
+    depends_on: { postgres: { condition: service_healthy }, redis: { condition: service_healthy }, mqtt: { condition: service_started } }
+    ports: ["8000:8000"]
+    healthcheck: { test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health')"], interval: 5s, retries: 30, start_period: 20s }
+  simulator:
+    build: ./backend
+    command: python -m app.simulator --mqtt mqtt --interval 1.0 --devices 100
+    depends_on: { backend: { condition: service_healthy } }
+  frontend:
+    build: { context: ./frontend, args: { NEXT_PUBLIC_API_URL: "http://localhost:8000" } }
+    depends_on: [backend]
+    ports: ["3000:3000"]
+volumes: { pgdata: {} }

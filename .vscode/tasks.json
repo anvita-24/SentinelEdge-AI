@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "setup backend", "type": "shell", "options": { "cwd": "backend" },
+      "command": "python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt" },
+    { "label": "test backend", "type": "shell", "options": { "cwd": "backend" }, "command": ".venv/bin/pytest --cov=app" },
+    { "label": "frontend dev", "type": "shell", "options": { "cwd": "frontend" }, "command": "npm install && npm run dev", "isBackground": true }
+  ]
+}

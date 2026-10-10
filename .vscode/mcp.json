@@ -1,0 +1,2 @@
+{ "servers": { "sentineledge": { "type": "stdio", "command": "${workspaceFolder}/backend/.venv/bin/python",
+  "args": ["-m", "app.mcp_server"], "cwd": "${workspaceFolder}/backend", "env": { "SE_MCP_API_KEY": "operator-key" } } } }

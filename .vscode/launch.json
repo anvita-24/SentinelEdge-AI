@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "API (FastAPI)", "type": "debugpy", "request": "launch", "module": "uvicorn",
+      "args": ["app.main:app", "--reload", "--port", "8000"], "cwd": "${workspaceFolder}/backend" },
+    { "name": "Simulator (HTTP)", "type": "debugpy", "request": "launch", "module": "app.simulator",
+      "args": ["--http", "http://localhost:8000", "--interval", "0.5"], "cwd": "${workspaceFolder}/backend" },
+    { "name": "MCP server (operator)", "type": "debugpy", "request": "launch", "module": "app.mcp_server",
+      "env": { "SE_MCP_API_KEY": "operator-key" }, "cwd": "${workspaceFolder}/backend" }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "test_events": 28000,
+  "anomalous_events": 8000,
+  "scenarios": 8,
+  "threshold": 18.0,
+  "combined_risk": {
+    "precision": 0.9168,
+    "recall": 0.8321,
+    "f1": 0.8724,
+    "fpr": 0.0302,
+    "tp": 6657,
+    "fp": 604,
+    "fn": 1343,
+    "tn": 19396
+  },
+  "isolation_forest_only_best_f1": 0.7637,
+  "per_scenario_recall": {
+    "overheating": 0.718,
+    "cpu_hijack": 0.802,
+    "data_exfiltration": 0.991,
+    "credential_attack": 1.0,
+    "signal_interference": 0.581,
+    "battery_drain": 0.768,
+    "memory_leak": 0.797,
+    "message_flood": 1.0
+  },
+  "root_cause_category_accuracy_on_anomalies": 0.6614
+}
